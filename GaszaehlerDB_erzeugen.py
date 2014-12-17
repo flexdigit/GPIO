@@ -1,9 +1,5 @@
 #!/usr/bin/python
-
-#
-# tr -d '\r' < File.py > File-new.py
-#
-
+# -*- coding: utf-8 -*-
 import os, sys, sqlite3
 
 # Existenz feststellen
@@ -18,7 +14,8 @@ connection = sqlite3.connect("Gaszaehler.db")
 cursor = connection.cursor()
 
 # Tabelle erzeugen
-sql = "CREATE TABLE gascounter(delta INTEGER, timestamp FLOAT)"
+#sql = "CREATE TABLE gascounter(delta INTEGER, timestamp FLOAT)"
+sql = "CREATE TABLE gascounter(delta INTEGER, time DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL);"
 cursor.execute(sql)
 
 # Verbindung beenden
