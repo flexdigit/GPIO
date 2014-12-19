@@ -18,8 +18,6 @@ try:
         sql = 'INSERT INTO gascounter (delta) VALUES (?)'
         args = (x,)
         cursor.execute(sql, args)
-        #cursor.execute("INSERT INTO gascounter (delta) VALUES ("%i")", x)
-        #cur.executemany("INSERT INTO Cars VALUES(?, ?, ?)", cars)
         
         time.sleep(0.5)
 
