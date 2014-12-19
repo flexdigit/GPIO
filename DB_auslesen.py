@@ -43,5 +43,15 @@ cursor.execute(sql)
 for dsatz in cursor:
     print "Max aus dailyamount: %f" %dsatz[0]
 print
+
+# SQL-Abfrage
+sql = "SELECT * FROM adjust"
+# Absenden der SQL-Abfrage
+cursor.execute(sql)
+
+print "Table: adjust"
+for dsatz in cursor:
+    print dsatz[0]
+
 # Verbindung beenden
 connection.close()
