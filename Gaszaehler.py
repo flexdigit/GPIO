@@ -24,6 +24,7 @@ GPIO.setup(LED, GPIO.OUT)
 localtime = time.asctime(time.localtime(time.time()))
 print localtime
 
+#------------------------------------------------------------
 # define ISR which increments the counter only
 def myInterrupt(channel):
     
@@ -38,10 +39,11 @@ def myInterrupt(channel):
     GPIO.output(LED, 1)
     time.sleep(0.1)
     GPIO.output(LED, 0)
-    
+
+#------------------------------------------------------------
 # add interrupt event on Pin 22
-# react as rising edge, declare ISR "myInterrupt", bounce time 400ms
-GPIO.add_event_detect(REED_gas, GPIO.RISING, callback = myInterrupt, bouncetime = 400)
+# react as rising edge, declare ISR "myInterrupt"
+GPIO.add_event_detect(REED_gas, GPIO.RISING, callback = myInterrupt)
 
 #--------------------------------------------------------------------
 # Database Gaszahler.db contains three tables with the following
@@ -69,6 +71,7 @@ try:
         time.sleep(300) # wait for 5 minutes
         #print "5 Sekunden sind abgelaufen. Ich schreibe in DB."
         
+		#------------------------------------------------------------
         # Reed contact counts 2 time per one rotation (at 1 and 9).
         # So we have to divide the Counter by 2.
         # But first we have to check if the Counter value is uneven. If so
@@ -83,7 +86,8 @@ try:
                 
         # print Counter and timestamp to console
         print "Counter " + str(Counter), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
-                
+        
+		#------------------------------------------------------------
         # connect and create record cursor
         connection = sqlite3.connect("Gaszaehler.db")
         cursor = connection.cursor()
@@ -97,10 +101,10 @@ try:
         args = (Counter,time.strftime("%Y-%m-%d %H:%M:%S"))
         cursor.execute(sql, args)
         connection.commit()
-        
         connection.close()
         
-        # reset Counter
+		#------------------------------------------------------------
+        # reset Counter for next 5 minutes
         Counter = 0
 
 except KeyboardInterrupt:
