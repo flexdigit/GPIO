@@ -74,7 +74,7 @@ try:
         # But first we have to check if the Counter value is uneven. If so
         # we will lose one Counter-value thru division. Therefore we save this
         # in "Merker" with "= 1" for the next five minutes.
-        if Cocunter%2 == 1:
+        if Counter%2 == 1:
         	Merker = 1		# uneven
 		else:
 			Merker = 0		# even
