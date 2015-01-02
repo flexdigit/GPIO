@@ -27,14 +27,14 @@ print localtime
 #------------------------------------------------------------
 # define ISR which increments the counter only
 def myInterrupt(channel):
-    
+
     # access to globale variable
     global Counter
 
     # increase Counter by one
     Counter = Counter + 1
     #print "Counter " + str(Counter)
-    
+
     # Switch LED on to see something happens here...
     GPIO.output(LED, 1)
     time.sleep(0.1)
@@ -56,54 +56,54 @@ GPIO.add_event_detect(REED_gas, GPIO.RISING, callback = myInterrupt)
 try:
     # infinite loop
     while 1:
-    	#------------------------------------------------------------
+        #------------------------------------------------------------
         # Check flag (Merker) if after last 5 minutes the counter had
         # an uneven number the division by 2 lost one counter value.
         # Therefore we increase the counter by one.
         if Merker == 1:
-        	Counter += 1
-    	
+            Counter += 1
+
         #------------------------------------------------------------
         # Hier vielleicht aus der Datenbank anfragen wie lange gewartet werden soll?
         # Extra Tabelle? "idle_t" mit Spalte "delay"
         #------------------------------------------------------------
-        
+
         time.sleep(300) # wait for 5 minutes
         #print "5 Sekunden sind abgelaufen. Ich schreibe in DB."
-        
-		#------------------------------------------------------------
+
+        #------------------------------------------------------------
         # Reed contact counts 2 time per one rotation (at 1 and 9).
         # So we have to divide the Counter by 2.
         # But first we have to check if the Counter value is uneven. If so
         # we will lose one Counter-value thru division. Therefore we save this
         # in "Merker" with "= 1" for the next five minutes.
         if Counter%2 == 1:
-        	Merker = 1		# uneven
-		else:
-			Merker = 0		# even
-        
-		Counter = Counter/2
-                
+            Merker = 1      # uneven
+        else:
+            Merker = 0      # even
+
+        Counter = Counter/2
+
         # print Counter and timestamp to console
         print "Counter " + str(Counter), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
-        
-		#------------------------------------------------------------
+
+        #------------------------------------------------------------
         # connect and create record cursor
         connection = sqlite3.connect("Gaszaehler.db")
         cursor = connection.cursor()
-        
+
         # write Counter value + timestamp into table gascounter
         #cursor.execute("INSERT INTO gascounter(delta, tstamp) VALUES(%i, %s)"% (Counter, time.strftime("%Y-%m-%d %H:%M:%S")))
         #connection.commit()
-        
+
         # different method to write values into a database
         sql = 'INSERT INTO gascounter (delta, tstamp) VALUES(?,?)'
         args = (Counter,time.strftime("%Y-%m-%d %H:%M:%S"))
         cursor.execute(sql, args)
         connection.commit()
         connection.close()
-        
-		#------------------------------------------------------------
+
+        #------------------------------------------------------------
         # reset Counter for next 5 minutes
         Counter = 0
 
