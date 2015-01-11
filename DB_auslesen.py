@@ -1,57 +1,34 @@
 #!/usr/bin/python
 
-import sqlite3, time
+import sqlite3
 
-# Verbindung, Cursor erzeugen
-connection = sqlite3.connect("Gaszaehler.db")
+#--------------------------------------------------------------------
+# New database Gasmeter.db should contain two tables with the following
+# columns:
+#   - dailyamount     (amount, tstamp)
+#   - gascounter      (tick, tstamp)
+#--------------------------------------------------------------------
+
+# connect and create record cursor
+connection = sqlite3.connect("Gasmeter.db")
 cursor = connection.cursor()
 
-# SQL-Abfrage
-sql = "SELECT * FROM gascounter"
-# Absenden der SQL-Abfrage
-cursor.execute(sql)
-
-# Ausgabe des Ergebnisses
-# 'dsatz' entspricht den Spalten
-print "Table: gascounter"
-for dsatz in cursor:
-    print dsatz[0], dsatz[1]
-    #print dsatz[0], time.strftime("%d.%m.%Y %H:%M:%S", time.localtime(dsatz[1]))
-
-print
-# Max aus dailyamount
-sql = "SELECT MAX(delta) AS id FROM gascounter"    
-cursor.execute(sql)
-for dsatz in cursor:
-    print "Max aus gascounter: %f" %dsatz[0]
-print
-
-
-# SQL-Abfrage
+#--------------------------------------------------------------------
+print "check table dailyamount for values"
 sql = "SELECT * FROM dailyamount"
-# Absenden der SQL-Abfrage
 cursor.execute(sql)
-
-print "Table: dailyamount"
 for dsatz in cursor:
     print dsatz[0], dsatz[1]
-    
 print
-# Max aus dailyamount
-sql = "SELECT MAX(amount) AS id FROM dailyamount"    
+#--------------------------------------------------------------------
+print "check table gascounter for values"
+sql = "SELECT * FROM gascounter"
 cursor.execute(sql)
 for dsatz in cursor:
-    print "Max aus dailyamount: %f" %dsatz[0]
+    print dsatz[0], dsatz[1]
 print
 
-# SQL-Abfrage
-sql = "SELECT * FROM adjust"
-# Absenden der SQL-Abfrage
-cursor.execute(sql)
-
-print "Table: adjust"
-for dsatz in cursor:
-    print dsatz[0]
-
-# Verbindung beenden
+# disconnect database
 connection.close()
+
+
