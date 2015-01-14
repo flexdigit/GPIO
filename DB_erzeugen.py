@@ -2,10 +2,15 @@
 
 import sqlite3, datetime, time, os
 
-# If already exist, rename it
+# Backup existing DB-files in "2-steps"
+# delete already backuped DB-file.
+if os.path.exists("Gasmeter_OLD.db"):
+    os.remove("Gasmeter_OLD.db")
+# backup the DB-file
 if os.path.exists("Gasmeter.db"):
-    print "File already exist! Change name to Gasmeter.db_OLD"
-    os.rename("Gasmeter.db", "Gasmeter.db_OLD")
+    print "File already exist!"
+    print "Will be renamed to Gasmeter_OLD.db"
+    os.rename("Gasmeter.db", "Gasmeter_OLD.db")
 
 #--------------------------------------------------------------------
 # New database Gasmeter.db should contain two tables with the following
