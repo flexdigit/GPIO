@@ -2,6 +2,9 @@
 
 import sys, sqlite3, os, shutil, re
 
+# Start value for Gasmeter
+startvalue = 8568.555
+
 # Verbindung, Cursor erzeugen
 connection = sqlite3.connect("Gasmeter.db")
 cursor = connection.cursor()
@@ -27,7 +30,7 @@ cursor.execute(sql)
 
 # Ausgabe des Ergebnisses ('dsatz' entspricht den Spalten)
 #print
-hlptable = ""
+hlptable = "Gasmeter:\n\n"
 for dsatz in cursor:
     tmp = dsatz[0].split(" ")
     #print tmp[0], dsatz[1], "\t", dsatz[2]
@@ -55,13 +58,13 @@ for line in all_lines:
     strhlp += line
     
     # Regex applied to each line 
-    match = re.search("</table>", line)
-    #print match, line
+    match = re.search(pattern, line)
+    
     if match:
         # Make sure to add \n to display correctly when we write it back
         #new_line = match.group() + '\n'
         #new_line = match.group()
-        print line
+        #print line
         strhlp += hlptable
         #print strhlp
 
@@ -72,9 +75,9 @@ with open("new_index.htm", 'w') as f:
      f.writelines(strhlp)
 
 
-for zeile in strhlp:
+#for zeile in strhlp:
     #print (zeile.replace("\n",""))
-    print (zeile)
+#    print (zeile)
     
     
     
