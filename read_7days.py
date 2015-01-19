@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import sqlite3, time
+import sys, sqlite3, os, shutil, re
 
 # Verbindung, Cursor erzeugen
 connection = sqlite3.connect("Gasmeter.db")
@@ -18,7 +18,7 @@ sql = """SELECT tstamp,
         WHEN 0 THEN 'Sunday'
         ELSE 'fehler' END,
     SUM(tick)
-    FROM gascounter WHERE tstamp BETWEEN DATE('now', '-7 days') AND DATE('now', '+1 days')
+    FROM gascounter WHERE tstamp BETWEEN DATE('now', '-7 days') AND DATE('now')
     GROUP BY strftime('%w', tstamp)
     ORDER BY tstamp"""
 
@@ -26,11 +26,56 @@ sql = """SELECT tstamp,
 cursor.execute(sql)
 
 # Ausgabe des Ergebnisses ('dsatz' entspricht den Spalten)
-print
+#print
+hlptable = ""
 for dsatz in cursor:
     tmp = dsatz[0].split(" ")
-    print tmp[1], dsatz[1], "\t", dsatz[2]
+    #print tmp[0], dsatz[1], "\t", dsatz[2]
+    t_string =  str(tmp[0]) + " " + str(dsatz[1]) + " " + str(dsatz[2]) + "\n"
+    hlptable += t_string
+    
+print hlptable
 
 # Verbindung beenden
 connection.close()
 
+# open the index.htm in that way. 'close' will called autom. at the end of the block.
+try:
+    with open("index.htm") as infile:
+        all_lines = infile.readlines()
+except:
+    print("Couldn't find file index.htm")
+    sys.exit(0)
+
+pattern = "</table>"
+strhlp = ""
+
+# Iterate each line
+for line in all_lines:
+    strhlp += line
+    
+    # Regex applied to each line 
+    match = re.search("</table>", line)
+    #print match, line
+    if match:
+        # Make sure to add \n to display correctly when we write it back
+        #new_line = match.group() + '\n'
+        #new_line = match.group()
+        print line
+        strhlp += hlptable
+        #print strhlp
+
+with open("new_index.htm", 'w') as f:
+     # go to start of file
+     f.seek(0)
+     # actually write the lines
+     f.writelines(strhlp)
+
+
+for zeile in strhlp:
+    #print (zeile.replace("\n",""))
+    print (zeile)
+    
+    
+    
+    
