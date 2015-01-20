@@ -5,11 +5,11 @@ import sys, sqlite3, os, shutil, re
 # Start value for Gasmeter
 startvalue = 8568.555
 
-# Verbindung, Cursor erzeugen
+# Connect DB create cursor
 connection = sqlite3.connect("Gasmeter.db")
 cursor = connection.cursor()
 
-# SQL-Abfrage
+# SQL-Query
 sql = """SELECT tstamp,
     CASE CAST (strftime('%w', tstamp) as integer)
         WHEN 1 THEN 'Monday'
@@ -25,24 +25,30 @@ sql = """SELECT tstamp,
     GROUP BY strftime('%w', tstamp)
     ORDER BY tstamp"""
 
-# Absenden der SQL-Abfrage
+# dispatch the SQL-Query
 cursor.execute(sql)
 
-# Ausgabe des Ergebnisses ('dsatz' entspricht den Spalten)
-#print
-hlptable = "Gasmeter:\n\n"
+# Build together the string for the new Gasmeter table
+# dsatz[0] is tstamp (date + time)
+# dsatz[1] is day of the week
+# dsatz[2] is sum of the ticks
+hlptable = "\nGasmeter:\n\n<table border=1 frame=hsides rules=all>\n"
 for dsatz in cursor:
     tmp = dsatz[0].split(" ")
-    #print tmp[0], dsatz[1], "\t", dsatz[2]
-    t_string =  str(tmp[0]) + " " + str(dsatz[1]) + " " + str(dsatz[2]) + "\n"
-    hlptable += t_string
-    
-print hlptable
+    # tmp[0] is date
+    # tmp[1] is time
+    hlptable += "<tr>" + "\n"
+    hlptable += "<td>" + str(tmp[0]) + "</td>" + "<td>" + str(dsatz[1]) + "</td>" + "<td>" + str(dsatz[2]) + "</td>" + "\n"
+    hlptable += "</tr>" + "\n"
+   
+hlptable += "</table>" + "\n"
+#print hlptable
 
-# Verbindung beenden
+# close DB connection
 connection.close()
 
-# open the index.htm in that way. 'close' will called autom. at the end of the block.
+# Open the index.htm
+# 'close' will called autom. at the end of the with block.
 try:
     with open("index.htm") as infile:
         all_lines = infile.readlines()
@@ -53,32 +59,24 @@ except:
 pattern = "</table>"
 strhlp = ""
 
-# Iterate each line
+# Iterate thru all_line of index.htm and check
+# if match patern can be found
 for line in all_lines:
     strhlp += line
     
     # Regex applied to each line 
     match = re.search(pattern, line)
-    
     if match:
-        # Make sure to add \n to display correctly when we write it back
-        #new_line = match.group() + '\n'
-        #new_line = match.group()
-        #print line
         strhlp += hlptable
-        #print strhlp
 
+# Here old index.htm delete/rename or what else
+# to be able to write new content (with new Gasmeter
+# table) into index.htm.
+# Or just overwrite the old index.htm?
+
+        
+# write into new file
 with open("new_index.htm", 'w') as f:
-     # go to start of file
-     f.seek(0)
-     # actually write the lines
+     # write the lines
      f.writelines(strhlp)
 
-
-#for zeile in strhlp:
-    #print (zeile.replace("\n",""))
-#    print (zeile)
-    
-    
-    
-    
