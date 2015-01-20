@@ -80,3 +80,5 @@ with open("new_index.htm", 'w') as f:
      # write the lines
      f.writelines(strhlp)
 
+
+sys.exit(1)
