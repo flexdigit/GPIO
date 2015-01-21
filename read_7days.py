@@ -54,7 +54,7 @@ try:
         all_lines = infile.readlines()
 except:
     print("Couldn't find file index.htm")
-    sys.exit(0)
+    sys.exit(1)
 
 pattern = "</table>"
 strhlp = ""
@@ -81,4 +81,4 @@ with open("new_index.htm", 'w') as f:
      f.writelines(strhlp)
 
 
-sys.exit(1)
+sys.exit(0)
