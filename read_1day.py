@@ -39,6 +39,13 @@ sql = """select tstamp,
         GROUP BY strftime('%H', tstamp)
         ORDER BY tstamp"""
 
+# Values from today:
+#select tstamp, sum(tick) from gascounter where date(tstamp) = date('now')
+
+# from yesterday:
+#select tstamp, sum(tick) from gascounter where date(tstamp) = date('now', '-1 days')
+
+
 # dispatch the SQL-Query
 cursor.execute(sql)
 
