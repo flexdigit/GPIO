@@ -1,0 +1,29 @@
+Traceback (most recent call last):
+  File "//home/pi/GPIO/calc_daily_amount.py", line 27, in <module>
+    cursor.execute(sql)
+sqlite3.OperationalError: no such table: gascounter
+dsatz: 760
+dsatz: 909
+dsatz: 915 2014-12-29 00:02:02
+dsatz: 1381 2014-12-30 00:02:01
+dsatz: 2893 2014-12-31 00:02:01
+dsatz: 2372 2015-01-01 00:02:01
+dsatz: 2275 2015-01-02 00:02:02
+dsatz: 2071 2015-01-03 00:02:02
+dsatz: 2055 2015-01-04 00:02:01
+dsatz: 1040 2015-01-05 00:02:01
+dsatz: 1020 2015-01-06 00:02:01
+dsatz: 934 2015-01-07 00:02:02
+dsatz: 908 2015-01-08 00:02:01
+dsatz: None 2015-01-09 00:02:01
+dsatz: 1443 2015-01-10 00:02:01
+dsatz: None 2015-01-11 00:02:02
+dsatz: 1012 2015-01-12 00:02:02
+dsatz: 1012 for yesterday: 2015-01-12 00:02:01 | Data generated: 2015-01-13 00:02:01
+dsatz: 1627 for yesterday: 2015-01-13 00:02:02 | Data generated: 2015-01-14 00:02:02
+dsatz: 1110 for yesterday: 2015-01-14 00:02:01 | Data generated: 2015-01-15 00:02:02
+dsatz: 1415 for yesterday: 2015-01-15 00:02:01 | Data generated: 2015-01-16 00:02:02
+dsatz: 1600 for yesterday: 2015-01-16 00:02:01 | Data generated: 2015-01-17 00:02:01
+dsatz: 1575 for yesterday: 2015-01-17 00:10:01 | Data generated: 2015-01-18 00:10:01
+dsatz: 1856 for yesterday: 2015-01-19 23:59:55 | Data generated: 2015-01-20 01:10:02
+dsatz: 1856 for yesterday: 2015-01-19 23:59:55 | Data generated: 2015-01-21 00:02:02
