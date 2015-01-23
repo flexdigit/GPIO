@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import sys, sqlite3, os, shutil, re
+import sqlite3
 
 
 # Connect DB create cursor
@@ -36,7 +36,7 @@ sql = """select tstamp,
             when 23 then '23'
             when 24 then '24'
         else 'fehler' end,
-        sum(tick) from gascounter where date(tstamp) = date('now', '-1 days')
+        sum(tick) from gascounter where date(tstamp) = date('now', '-8 days')
         GROUP BY strftime('%H', tstamp)
         ORDER BY tstamp"""
 
@@ -56,13 +56,14 @@ cursor.execute(sql)
 date_list = []     # will be the list for the date
 dsatz_1_list = []  # will be list for hours per day
 dsatz_2_list = []  # will be list for Gas consume
+daily_amount = 0
 
 for dsatz in cursor:
     tmp = dsatz[0].split(" ")
     # tmp[0] is date
     # tmp[1] is time
     #print str(dsatz[0]) + " " + str(dsatz[1]) + " " + str(dsatz[2])
-    print str(tmp[0]) + " " + str(dsatz[1]) + " " + str(dsatz[2])
+    #print str(tmp[0]) + " " + str(dsatz[1]) + " " + str(dsatz[2])
     date_list.append(tmp[0])
     dsatz_1_list.append(dsatz[1])
     dsatz_2_list.append(dsatz[2])
@@ -72,10 +73,14 @@ for dsatz in cursor:
 # close DB connection
 connection.close()
 
+print "date     time ticks/h"
 #for i in range(len(date_list)):
 for i in range(len(date_list)):
-    print i, date_list[i], dsatz_1_list[i], dsatz_2_list[i]
+    print date_list[i], dsatz_1_list[i], dsatz_2_list[i], dsatz_2_list[i]/2.0
+    daily_amount += dsatz_2_list[i]/2.0
+    
 
+print "\nTagesverbrauch: ",daily_amount, "[* 0,01]"
 
 # plot a diagramm
 #hist(dsatz_1_liste, 23)
