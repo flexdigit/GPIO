@@ -36,7 +36,7 @@ sql = """select tstamp,
             when 23 then '23'
             when 24 then '24'
         else 'fehler' end,
-        sum(tick) from gascounter where date(tstamp) = date('now', '-8 days')
+        sum(tick) from gascounter where date(tstamp) = date('now', '-2 days')
         GROUP BY strftime('%H', tstamp)
         ORDER BY tstamp"""
 
@@ -73,14 +73,16 @@ for dsatz in cursor:
 # close DB connection
 connection.close()
 
-print "date     time ticks/h"
+print "Day: ",date_list[0],"\n"
 #for i in range(len(date_list)):
 for i in range(len(date_list)):
-    print date_list[i], dsatz_1_list[i], dsatz_2_list[i], dsatz_2_list[i]/2.0
+    print dsatz_1_list[i], dsatz_2_list[i]/2.0
     daily_amount += dsatz_2_list[i]/2.0
     
+print "\nticks:          ",daily_amount, "[ticks]"
+daily_amount = daily_amount * 0.01
 
-print "\nTagesverbrauch: ",daily_amount, "[* 0,01]"
+print "Tagesverbrauch: ",daily_amount, "[m^3]"
 
 # plot a diagramm
 #hist(dsatz_1_liste, 23)
