@@ -32,23 +32,30 @@ cursor.execute(sql)
 # dsatz[0] is tstamp (date + time)
 # dsatz[1] is day of the week
 # dsatz[2] is sum of the ticks
-hlptable = "\nGasmeter:\n\n<table border=1 frame=hsides rules=all>\n"
+hlptable = "\nGasmeter:\n\n<table border=2 frame=hsides rules=all>\n"
+hlptable += "<tr>\n"
+hlptable += """<td align="center">Date</td><td align="center">Day</td><td align="center">m&sup3;</td>"""
+hlptable += "</tr>"
+
 for dsatz in cursor:
     tmp = dsatz[0].split(" ")
     # tmp[0] is date
     # tmp[1] is time
+    print tmp[0], dsatz[1], dsatz[2]
     hlptable += "<tr>" + "\n"
     hlptable += "<td>" + str(tmp[0]) + "</td>" + "<td>" + str(dsatz[1]) + "</td>" + "<td>" + str(dsatz[2]) + "</td>" + "\n"
     hlptable += "</tr>" + "\n"
    
-hlptable += "</table>" + "\n"
+hlptable += "</table>\n\n\n"
+hlptable += "</body>\n"
+hlptable += "</html>\n"
+
 #print hlptable
 
 # close DB connection
 connection.close()
 
 # Open the index.htm
-# 'close' will called autom. at the end of the with block.
 try:
     with open("index.htm") as infile:
         all_lines = infile.readlines()
@@ -60,25 +67,32 @@ pattern = "</table>"
 strhlp = ""
 
 # Iterate thru all_line of index.htm and check
-# if match patern can be found
+# if match pattern can be found
 for line in all_lines:
     strhlp += line
     
     # Regex applied to each line 
     match = re.search(pattern, line)
     if match:
-        strhlp += hlptable
+        strhlp += hlptable              # If found add new table to the string (contains entire file)
+        break                           # and break for loop
 
-# Here old index.htm delete/rename or what else
-# to be able to write new content (with new Gasmeter
-# table) into index.htm.
-# Or just overwrite the old index.htm?
+# Backup existing index.htm in 2 steps
+# 1. Delete already backuped file:
+if os.path.exists("index_OLD.htm"):
+    os.remove("index_OLD.htm")
+# 2. Backup the index.htm file:
+if os.path.exists("index.htm"):
+    print "File already exist!"
+    print "Will copy and renamed to index_OLD.htm"
+    #os.rename("index.htm", "index_OLD.htm")        # not good...
+    shutil.copy("index.htm", "index_OLD.htm")
 
-        
 # write into new file
-with open("new_index.htm", 'w') as f:
+#with open("new_index.htm", 'w') as f:
+with open("index.htm", "w") as fh:
      # write the lines
-     f.writelines(strhlp)
+     fh.writelines(strhlp)
 
 
-sys.exit(0)
+#sys.exit(0)
