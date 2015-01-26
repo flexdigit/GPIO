@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
 import sqlite3
-
+import matplotlib.pyplot as plt
+import numpy as np
 
 # Connect DB create cursor
 connection = sqlite3.connect("Gasmeter.db")
@@ -36,7 +37,7 @@ sql = """select tstamp,
             when 23 then '23'
             when 24 then '24'
         else 'fehler' end,
-        sum(tick) from gascounter where date(tstamp) = date('now', '-2 days')
+        sum(tick) from gascounter where date(tstamp) = date('now', '-9 days')
         GROUP BY strftime('%H', tstamp)
         ORDER BY tstamp"""
 
@@ -53,9 +54,9 @@ cursor.execute(sql)
 # dsatz[0] is tstamp (date + time)
 # dsatz[1] is hour of the day (0, 1, 2,...)
 # dsatz[2] is sum of the ticks
-date_list = []     # will be the list for the date
-dsatz_1_list = []  # will be list for hours per day
-dsatz_2_list = []  # will be list for Gas consume
+date_list        = []     # will be the list for the date
+h_per_day_list   = []  # will be list for hours per day
+Gas_consume_list = []  # will be list for Gas consume
 daily_amount = 0
 
 for dsatz in cursor:
@@ -65,29 +66,39 @@ for dsatz in cursor:
     #print str(dsatz[0]) + " " + str(dsatz[1]) + " " + str(dsatz[2])
     #print str(tmp[0]) + " " + str(dsatz[1]) + " " + str(dsatz[2])
     date_list.append(tmp[0])
-    dsatz_1_list.append(dsatz[1])
-    dsatz_2_list.append(dsatz[2])
+    h_per_day_list.append(dsatz[1])
+    Gas_consume_list.append(dsatz[2])
 
 #print max(dsatz_2_liste)
 
 # close DB connection
 connection.close()
 
-print "Day: ",date_list[0],"\n"
+print "\nDay: ",date_list[0]
 #for i in range(len(date_list)):
 for i in range(len(date_list)):
-    print dsatz_1_list[i], dsatz_2_list[i]/2.0
-    daily_amount += dsatz_2_list[i]/2.0
+    print h_per_day_list[i], Gas_consume_list[i]/2.0
+    daily_amount += Gas_consume_list[i]/2.0
     
 print "\nticks:          ",daily_amount, "[ticks]"
 daily_amount = daily_amount * 0.01
 
 print "Tagesverbrauch: ",daily_amount, "[m^3]"
 
-# plot a diagramm
-#hist(dsatz_1_liste, 23)
-#show()
+"""
+plot a diagramm
 
+"""
+ind = np.arange(len(h_per_day_list))
+x = h_per_day_list
+y = Gas_consume_list
+width = 0.8
+p = plt.bar(ind, y, width, color='g')
 
-#sys.exit(0)
+plt.ylabel('Gas consumtion [m^3]')
+plt.title('Gas consumtion per one day')
+#plt.xticks(x)
+#plt.legend( (p[0]), ('[m^3]') )
+
+plt.show()
 
