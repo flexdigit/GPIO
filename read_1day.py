@@ -95,8 +95,8 @@ y = Gas_consume_list
 width = 0.8
 p = plt.bar(ind, y, width, color='g')
 
-plt.ylabel('Gas consumtion [m^3]')
-plt.title('Gas consumtion per one day')
+plt.ylabel('Gas consumption [m^3]')
+plt.title('Gas consumption per one day')
 #plt.xticks(x)
 #plt.legend( (p[0]), ('[m^3]') )
 
