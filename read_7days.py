@@ -2,9 +2,6 @@
 
 import sys, sqlite3, os, shutil, re
 
-# Start value for Gasmeter
-startvalue = 8568.555
-
 # Connect DB create cursor
 connection = sqlite3.connect("Gasmeter.db")
 cursor = connection.cursor()
