@@ -48,8 +48,10 @@ def myInterrupt(channel):
 # react as rising edge
 # declare ISR "myInterrupt"
 #GPIO.add_event_detect(REED_gas, GPIO.RISING, callback = myInterrupt)
+#GPIO.add_event_detect(REED_gas, GPIO.RISING, callback = myInterrupt, bouncetime=300)
 #GPIO.add_event_detect(REED_gas, GPIO.FALLING, callback = myInterrupt)
-GPIO.add_event_detect(REED_gas, GPIO.FALLING, callback = myInterrupt, bouncetime=500)
+#GPIO.add_event_detect(REED_gas, GPIO.FALLING, callback = myInterrupt, bouncetime=1000)
+GPIO.add_event_detect(REED_gas, GPIO.FALLING, callback = myInterrupt, bouncetime=4000)
 
 #--------------------------------------------------------------------
 # New database Gasmeter.db contain two tables with the following
